@@ -10,7 +10,7 @@
 // 		path: path.resolve(__dirname,'dist'),
 // 		// filename: '[chunkhash].[name].bundle.js'
 // 		filename: 'bundle.js',
-// 		publicPath:'dist/'//按需加载的模块，需要使用
+// 		publicPath:'dist/'//按需加载的模块，需要使用;为项目中所有资源指定一个基础路径
 // 	},
 // 	module: {
 // 		rules:[

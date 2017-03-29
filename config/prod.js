@@ -2,6 +2,7 @@ const path =  require('path');
 const webpack= require('webpack');
 const webpackMerge = require('webpack-merge');
 const commonConfig = require('./base.js');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports =  function(env){
 	return webpackMerge(commonConfig(),{//使用merge合并base
@@ -11,6 +12,11 @@ module.exports =  function(env){
 		// 	publicPath: publicPath,
 		// 	sourceMapFilename: '[name].map'
 		// },
+		output: {
+			path: path.resolve(__dirname,'../dist/prod'),
+			filename: '[name].[chunkhash].bundle.js',
+			chunkFilename: '[name].[chunkhash].js'
+		},
 		plugins: [
 			new webpack.LoaderOptionsPlugin({
 				minimize: true,
@@ -31,6 +37,20 @@ module.exports =  function(env){
 				'process.env': {
 					'NODE_ENV': JSON.stringfy('prod');
 				}
+			}),
+			new ManifestPlugin({
+				fileName: 'my-manifest.json',
+				basePath: '/'
+			}),
+			new webpack.optimize.CommonsChunkPlugin({
+				name: ['vendor','manifest'],
+				minChunks: Infinity
+			}),
+			new webpack.HashedModuleIdsPlugin(),
+			new WebpackChunkHash(),
+			new ChunkManifestPlugin({
+				filename: 'chunk-manifest.json',
+				manifestVariable: 'webpackManifest'
 			})
 		]
 	})

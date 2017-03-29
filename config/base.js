@@ -10,12 +10,12 @@ module.exports = function(env){
 		},
 		output: {
 			filename: '[name].bundle.js',
-			path: path.resolve(__dirname,'../dist/assets'),
+			// path: path.resolve(__dirname,'../dist/assets'),
 			publicPath: publicPath,
 			sourceMapFilename: '[name].map'
 		},
 		resolve: {
-			extensions: ['','.js','.json'],
+			extensions: ['','.js','.json'],//来告诉 webpack 在解析查找js 模块时该检索哪些文件扩展名
 			modules: [path.join(__dirname,'../app'),'../node_modules']
 		},
 		module: {
