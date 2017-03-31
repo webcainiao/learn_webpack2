@@ -73,7 +73,36 @@ module.exports = {
 			port: ,//number,only cli
 			proxy:,//string,如果你有单独的后端开发服务器 API，并且希望在同域名下发送 API 请求 ，那么代理某些 URL 会很有用。
 			public:,//string,only cli
+
+			stats: ,//string|object;对于 webpack-dev-server ，这个属性要放在 devServer 对象里;在使用 Node.js API 后，此选项无效
 			
-		}
+		},
+		target: ,//string,告诉 webpack 这个程序的目标环境是什么,默认值为'web',编译为类浏览器环境
+		watch: ,//boolean,默认false;webpack-dev-server 和 webpack-dev-middleware 里 Watch 模式默认开启
+		watchOptions: {
+			//一组用来定制 Watch 模式的选项
+			aggregateTimeout: ,//number,以毫秒记
+			ignored: /node_modules/,//rgex|string,对于某些系统，监听大量文件系统会导致大量的 CPU 或内存占用。这个选项可以排除一些巨大的文件夹，例如 node_modules;其他模式"files/**/*.js"
+			poll:,//boolean|number; 如果监听没生效，试试这个选项吧。Watch 在 NFS 和 VirtualBox 机器上不适用。
+		},
+		externals: ,//string regex object array function
+		//webpack 中的 externals 配置提供了「不从 bundle 中引用依赖」的方式。解决的是，所创建的 bundle 依赖于那些存在于用户环境(consumer environment)中的依赖。 此选项通常适用于 library 开发人员，但应用程序开发人员也可以充分利用此功能。
+		node:,//object,使用 polyfill 或 mock 来自定义 NodeJS 环境
+		performence: {
+			hints:,//boolean | "error" | "warning"
+			maxEntrypointSize:,//int,入口起点表示针对指定的入口，对于所有资源，要充分利用初始加载时(initial load time)期间。此选项根据入口起点的最大体积，控制 webpack 何时生成性能提示。默认值是：250000 (bytes)。
+			maxAssetSize: ,//int,资源(asset)是从 webpack 生成的任何文件。此选项根据单个资源体积，控制 webpack 何时生成性能提示。默认值是：250000 (bytes)。
+			assetFilter:,//function,此属性允许 webpack 控制用于计算性能提示的文件
+		},
+		amd: {
+
+		},
+		bail: true,//boolean,这将迫使 webpack 退出其打包过程
+		cache: ,//boolean|object,缓存生成的 webpack 模块和 chunk，来改善构建速度
+		loader: ,//object,在 loader 上下文中暴露自定义值
+		profile: ,//boolean
+		recordsPath: ,//
+		recordsInputPath:,//
+		recordsOutputPath:,//
 	}
 }
