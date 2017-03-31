@@ -73,10 +73,18 @@ module.exports = {
 			port: ,//number,only cli
 			proxy:,//string,如果你有单独的后端开发服务器 API，并且希望在同域名下发送 API 请求 ，那么代理某些 URL 会很有用。
 			public:,//string,only cli
-
+			publicPath: ,//string,确保 publicPath 总是以斜杠(/)开头和结尾
+			quiet: ,//boolean, 
+			setup: ,//function,
+			staticOptions:{},// 只在 contentBase 是一个字符串时有效
+			stats: ,//string|object; 使用 quiet 或 noInfo 时，此选项无效。
+			watchContentBase: ,//boolean;
+			watchOptions: ,//object
 			stats: ,//string|object;对于 webpack-dev-server ，这个属性要放在 devServer 对象里;在使用 Node.js API 后，此选项无效
 			
 		},
+		//devtool此选项控制是否生成，以及如何生成 Source Map。
+		devtool: ,//string|false
 		target: ,//string,告诉 webpack 这个程序的目标环境是什么,默认值为'web',编译为类浏览器环境
 		watch: ,//boolean,默认false;webpack-dev-server 和 webpack-dev-middleware 里 Watch 模式默认开启
 		watchOptions: {
