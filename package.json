@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --env=dev --progress --colors --profile",
-    "prod": "webpack --env=prod --progress --colors --profile"
+    "prod": "webpack --env=prod --progress --colors --profile",
+    "view":"echo ${npm_package_repository_url}"
   },
   "repository": {
     "type": "git",
