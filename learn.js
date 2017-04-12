@@ -1,4 +1,32 @@
 module.exports = {
+	//entry 的多种写法
+	entry: 'path/xxx.js',//单个入口文件
+	entry: {
+		xxx: 'path/xxx.js'//上面写法为此简写形式
+	},
+	entry: ['path/xx.js','path/xx.js'],//多入口文件
+	entry: {//多入口文件写法，以及vendor公共库,可将共用的不变的库，与应用代码分离打包
+		xx: 'path/xx.js',
+		xx: 'path/xx.js',
+		vendors: 'path/vendor.js'//结合使用CommonsChunkPlugin
+	}
+	//output
+	output: {
+		//最简单的写法是，只有path和filename,而且是必须的
+		path: path.resole(__dirname,'xx'),//绝对路径,只有一个路径
+		filename: '[].[].bundle.js',//一般以.bundle,.main,.index结尾
+		//下面是可选的
+		chunkFilename: '',//非入口的chunk文件名，路径相对于path
+		crossOriginLoading: ,//default is false禁用跨域加载,anonymous启用，不带凭证,use-credentials启动，带凭证
+		devtoolLineToLine: ,//default is false;不推荐true
+		hotUpdateChunkFilename: ,//default value is  [id].[hash].hot-update.js热更新chunk的文件名
+		hotUpdateMainFilename: ,//default [hash].hot-update.js热更新主文件名
+		hotUpdateFunction: 'webpackHotUpdate',//webpack中用于异步加载热更新chunk的jsonp函数
+		jsonpFunction: 'webpackJsonp',//webpack中用于异步加载chunk的jsonp函数
+		library: ,//将bundle导出为library,用于编写库
+		libraryTarget: ,//library的导出格式
+		sourceMapFilename: '[file].map'//可使用： [file] js文件的文件名，[hash] compilation周期的hash，[id] chunk的id
+	}
 	module: {
 		context: ,//string,基础目录，绝对路径，用于从配置中解析入口起点(entry point)和加载器(loader)
 		entry: ,//string | [string] | object { <key>: string | [string] }
