@@ -118,7 +118,7 @@ module.exports = {
 
 			}),
 			new webpack.optimize.CommonsChunkPlugin({
-				name: 'vendor',
+				name: ['vendor','manifest'],//打包输出entry.js,vendor.js,manifest.js。只有vendor的chunkhash不变
 				minChunks: function(module){
 					//假定引入的vendor存在于node_modules
 					return module.context && module.context.indexOf('node_modules') !== -1;
