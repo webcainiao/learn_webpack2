@@ -19,7 +19,7 @@ module.exports =  function(env){
 		},
 		plugins: [
 			new webpack.LoaderOptionsPlugin({
-				minimize: true,
+				minimize: true,//表示压缩loader,2中取消了uglifyjsplugin压缩loader的功能，这样写兼容1
 				debug: false
 			}),
 			new UglifyJsPlugin({//webpack.optimize.UglifyJsPlugin
@@ -31,12 +31,14 @@ module.exports =  function(env){
 				compress: {
 					screw_ie8: true
 				},
-				comments: false
+				comments: false,
+				sourceMap: true
 			}),
 			new webpack.DefinePlugin({
 				'process.env': {
-					'NODE_ENV': JSON.stringfy('prod');
-				}
+					'NODE_ENV': JSON.stringify('prod');
+				},//多种写法
+				'process.evn.NODE_ENV': JSON.stringify('production'),//return '"production"'
 			}),
 			new ManifestPlugin({
 				fileName: 'my-manifest.json',

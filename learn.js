@@ -1,4 +1,7 @@
 module.exports = {
+	target:'web' ,//构建目标,default is web
+	watch: false,//default is false,禁用监听，webpack-dev-server和webpack-dev-middleware中默认开启is true
+	watchOptions: {},//watch模式的选项
 	//entry 的多种写法
 	entry: 'path/xxx.js',//单个入口文件
 	entry: {
@@ -26,7 +29,8 @@ module.exports = {
 		library: ,//将bundle导出为library,用于编写库
 		libraryTarget: ,//library的导出格式
 		sourceMapFilename: '[file].map'//可使用： [file] js文件的文件名，[hash] compilation周期的hash，[id] chunk的id
-	}
+	},
+
 	module: {
 		context: ,//string,基础目录，绝对路径，用于从配置中解析入口起点(entry point)和加载器(loader)
 		entry: ,//string | [string] | object { <key>: string | [string] }
@@ -55,34 +59,71 @@ module.exports = {
 		},
 		module: {//这些选项决定了如何处理项目中的不同类型的模块。
 			noParse:,//RegExp | [RegExp]
-			rules: ,//array,创建模块时，匹配请求的规则数组。这些规则能够修改模块的创建方式。这些规则能够对模块(module)应用加载器(loader)，或者修改解析器(parser)。
-		},
-		resolve: {
-			alias: {
+			//rules    array,创建模块时，匹配请求的规则数组。这些规则能够修改模块的创建方式。这些规则能够对模块(module)应用加载器(loader)，或者修改解析器(parser)。
+			rules: [
+				//loaders loader是对应用程序中的资源文件进行转换,是nodejs中的函数,接受资源文件作为参数，返回新的资源文件
+				//下面的写法，是相同的作用,放在module.rules中,rules is array
+				//这种方法利于在原码中减少引用,更快调试和定位loader
+				{test: /\.css$/,loader: 'css-loader'},
+				{test: /\.css$/,use: 'css-loader'},
+				{test: /\.css$/,use: {
+					loader: 'css-loader',
+					options: {
 
+					}
+				}},
+				//多个loader如下书写
+				{test: /\.css$/,use: [
+					{loader: 'style-loader'},
+					{loader: 'css-loader',options: {modules: true}}
+				]},
+				//也可以在require,define,require.ensure中直接使用loader
+				//require('style-loader!css-loader?modules!./style.css')
+			],
+		},
+		resolve: {//resolve是文件解析器
+			alias: {
+				xyz: 'path/xx/x',//此表示路径
+				xyz$: 'path/xx/x.js',//当引用xyz时，直接引用的具体的js文件
 			},
 			aliasFields:,//string
 			descriptionFiles:,//array
 			enforceExtension: false;//boolean ;false允许无扩展名的使用
 			enforceModuleExtension: false;//对模块是否需要使用的扩展（例如 loader）
 			extensions: ,//array,自动解析确定的扩展,默认值为['.js','.json'],能够使用户在引入模块时不带扩展
-			mainFields: ,//array,默认值：['browser','module','main']
+			//
+			mainFields: ,//array,target: webworker/web 时默认值：['browser','module','main'],否则是['module','main']
+			//当引入一个模块时，被解析为路径，此路径下含有package.json，则引入package.json中定义的属性为browser,module,main所表示的js文件
 			mainFiles: ,//array,解析目录时要使用的文件名,默认：['index']
-			modules: ,//array,默认值:['node_modules'],告诉 webpack 解析模块时应该搜索的目录,
+			modules: [绝对路径,'node_modules'],//array,默认值:['node_modules'],告诉 webpack 解析模块时应该搜索的目录,
 			//如果你想要添加一个目录到模块搜索目录，此目录优先于 node_modules/ 搜索.modules:[path.resolve(__dirname,'path'),'node_modules']
+			//其他文件使用require('module/path/file'),就在此modules路径设置中查找模块
+			//如: import Vue from 'vue'.vue模块就是在node_modules目录下查找的
 			unsafeCache: ,//regx|array|boolean.启用，会主动缓存模块，但并不安全
 			plugins: ,//array,应该使用的额外的解析插件列表。它允许插件，如 DirectoryNamedWebpackPlugin。
 			symlinks: ,//boolean,
 			cachePredicate:,//function,决定请求是否应该被缓存的函数
-			resolveLoader:{//?
-				//这组选项与上面的 resolve 对象的属性集合相同，但仅用于解析 webpack 的 loader 包
-				moduleExtensions:,//array,在解析模块（例如，loader）时尝试使用的扩展。默认是一个空数组。
-				//如果你想要不带 -loader 后缀使用 loader，你可以使用moduleExtensions:['-loader']
-
-			},
 		},
-		plugins: [
+		resolveLoader:{//?
+			//这组选项与上面的 resolve 对象的属性集合相同，但仅用于解析 webpack 的 loader 包
+			moduleExtensions:,//array,在解析模块（例如，loader）时尝试使用的扩展。默认是一个空数组。
+			//如果你想要不带 -loader 后缀使用 loader，你可以使用moduleExtensions:['-loader']
 
+		},
+		plugins: [//解决loader无法解决的其他事,比如一些常用的插件
+			new webpack.optimize.UglifyJsPlugin(),
+			new HtmlWebpackPlugin({
+				filename:,
+				template: 'path/xx.xx',
+
+			}),
+			new webpack.optimize.CommonsChunkPlugin({
+				name: 'vendor',
+				minChunks: function(module){
+					//假定引入的vendor存在于node_modules
+					return module.context && module.context.indexOf('node_modules') !== -1;
+				}
+			})
 		],
 		devServer: {
 			clientLogLevel:,//string
@@ -112,7 +153,8 @@ module.exports = {
 			
 		},
 		//devtool此选项控制是否生成，以及如何生成 Source Map。
-		devtool: ,//string|false
+		devtool: '#cheap-module-eval-source-map',//string|false 开发 '#'好像有不带的
+		devtool: '#source-map',//string|false  生产
 		target: ,//string,告诉 webpack 这个程序的目标环境是什么,默认值为'web',编译为类浏览器环境
 		watch: ,//boolean,默认false;webpack-dev-server 和 webpack-dev-middleware 里 Watch 模式默认开启
 		watchOptions: {
@@ -141,4 +183,13 @@ module.exports = {
 		recordsInputPath:,//
 		recordsOutputPath:,//
 	}
+}
+
+
+//.babelrc
+{
+	"presets":[
+		["env",{module: false}],//module:false不解析es2015,amd,commonjs中的引入模块的语法符号
+		"stage-2"
+	]
 }

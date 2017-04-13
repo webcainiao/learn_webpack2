@@ -15,7 +15,7 @@ module.exports = function(env){
 			sourceMapFilename: '[name].map'
 		},
 		resolve: {
-			extensions: ['','.js','.json'],//来告诉 webpack 在解析查找js 模块时该检索哪些文件扩展名
+			extensions: ['.js','.json'],//空字符串不再需要传递，来告诉 webpack 在解析查找js 模块时该检索哪些文件扩展名
 			modules: [path.join(__dirname,'../app'),'../node_modules']
 		},
 		module: {
