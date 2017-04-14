@@ -34,7 +34,7 @@ module.exports =  function(env){
 				comments: false,
 				sourceMap: true
 			}),
-			new webpack.DefinePlugin({
+			new webpack.DefinePlugin({//使我们安心的使用环境变量
 				'process.env': {
 					'NODE_ENV': JSON.stringify('prod');
 				},//多种写法

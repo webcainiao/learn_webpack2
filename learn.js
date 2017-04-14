@@ -58,7 +58,7 @@ module.exports = {
 			umdNamedDefine: ,//boolean,当使用了 libraryTarget: "umd"，设置;umdNamedDefine: true
 		},
 		module: {//这些选项决定了如何处理项目中的不同类型的模块。
-			noParse:,//RegExp | [RegExp]
+			noParse:,//RegExp | [RegExp] ,webpack将直接引入此模块,node_modules/xx/dist目录下，并不解析它
 			//rules    array,创建模块时，匹配请求的规则数组。这些规则能够修改模块的创建方式。这些规则能够对模块(module)应用加载器(loader)，或者修改解析器(parser)。
 			rules: [
 				//loaders loader是对应用程序中的资源文件进行转换,是nodejs中的函数,接受资源文件作为参数，返回新的资源文件
@@ -123,6 +123,10 @@ module.exports = {
 					//假定引入的vendor存在于node_modules
 					return module.context && module.context.indexOf('node_modules') !== -1;
 				}
+			}),
+			new webpack.ProvidePlugin({//在应用代码中使用，未声明的下面的变量时，默认以此指定的模块库代替
+				'$': 'jquery',
+				'Jquery': 'jquery'
 			})
 		],
 		devServer: {
